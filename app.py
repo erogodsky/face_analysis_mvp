@@ -1,7 +1,8 @@
 import cv2, json
 from modules.face_recognition_module import FaceIdentifier
 from modules.landmarks_pose import LandmarkPoseEstimator
-# from modules.lipreading_module import LipReader
+# from modules.lipreading import LipReader
+
 
 def main():
     cap = cv2.VideoCapture("data/input.mp4")
@@ -10,15 +11,16 @@ def main():
     # lip_reader = LipReader()
 
     frames_data = []
-    lip_frames = []
 
     while True:
         ret, frame = cap.read()
-        if not ret: break
+        if not ret:
+            break
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         identities = face_id.identify(frame)
         landmarks, head_pose = pose_estimator.process_frame(frame)
-        # lip_frames.append(extract_lip_roi(frame, landmarks))
+        # lip_reader.add_frame(frame, landmarks)
 
         frames_data.append({
             "identity": identities[0][0] if identities else "unknown",
@@ -31,10 +33,6 @@ def main():
     # output = {"frames": frames_data, "lip_text": lip_text}
     # json.dump(output, open("data/output.json", "w"), indent=2)
 
-def extract_lip_roi(frame, landmarks):
-    if not landmarks: return None
-    # простая функция вырезания области губ по лендмаркам
-    return frame
 
 if __name__ == "__main__":
     main()
