@@ -20,16 +20,17 @@ class LandmarkPoseEstimator:
         self.face_mesh = mp.solutions.face_mesh.FaceMesh(
             static_image_mode=False,
             max_num_faces=1,
-            min_detection_confidence=0.5
+            min_detection_confidence=0.5,
+            refine_landmarks=True
         )
 
     def process_frame(self, frame):
         res = self.face_mesh.process(frame)
         if not res.multi_face_landmarks:
             return None, None
-        lm = res.multi_face_landmarks[0]
-        landmarks = [(p.x, p.y, p.z) for p in lm.landmark]
-        yaw, pitch, roll = self._estimate_head_pose(lm.landmark, frame.shape)
+        raw_landmarks = res.multi_face_landmarks[0].landmark
+        landmarks = [(p.x, p.y, p.z) for p in raw_landmarks]
+        yaw, pitch, roll = self._estimate_head_pose(raw_landmarks, frame.shape)
         return landmarks, {"yaw": yaw, "pitch": pitch, "roll": roll}
 
     def _estimate_head_pose(self, landmarks, frame_shape):

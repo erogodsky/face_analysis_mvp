@@ -16,14 +16,12 @@ class FaceIdentifier:
                 names.append(img_path.stem)
         return encodings, names
 
-    def identify(self, frame):
-        faces = face_recognition.face_locations(frame, model='cnn')
-        encs = face_recognition.face_encodings(frame, faces)
-        results = []
-        for face_loc, enc in zip(faces, encs):
-            distances = face_recognition.face_distance(self.encodings, enc)
-            idx = np.argmin(distances)
-            name = self.names[idx] if distances[idx] < 0.6 else "unknown"
+    def identify(self, frame, face_bbox):
+        if not face_bbox:
+            return "unknown"
+        face_enc = face_recognition.face_encodings(frame, [face_bbox])[0]
+        distances = face_recognition.face_distance(self.encodings, face_enc)
+        idx = np.argmin(distances)
+        name = self.names[idx] if distances[idx] < 0.6 else "unknown"
 
-            results.append((name, face_loc))
-        return results
+        return name, face_bbox
