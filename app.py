@@ -17,8 +17,8 @@ parser.add_argument(
 args = parser.parse_args()
 
 
-def main():
-    cap = cv2.VideoCapture("data/input.mp4")
+def main(input):
+    cap = cv2.VideoCapture(input)
     face_detector = FaceDetector()
     face_id = FaceIdentifier("gallery")
     pose_estimator = LandmarkPoseEstimator()
@@ -53,4 +53,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(args.input)
