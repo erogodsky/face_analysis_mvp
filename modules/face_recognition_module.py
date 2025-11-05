@@ -2,6 +2,7 @@ import face_recognition
 import numpy as np
 from pathlib import Path
 
+
 class FaceIdentifier:
     def __init__(self, gallery_path):
         self.encodings, self.names = self._load_gallery(gallery_path)

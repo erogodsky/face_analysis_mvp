@@ -1,6 +1,5 @@
 import numpy as np
 import torch
-import torchvision
 import argparse
 
 from auto_avsr.lightning import ModelModule
@@ -43,12 +42,8 @@ class InferencePipeline(torch.nn.Module):
         self.modelmodule.model.load_state_dict(ckpt)
         self.modelmodule.eval()
 
-    def load_video(self, data_filename):
-        return torchvision.io.read_video(data_filename, pts_unit="sec")[0].numpy()
-
     def forward(self, frames, landmarks):
         video = np.stack(frames, axis=0)
-        # landmarks = self.landmarks_detector(video)
         keypoints = preprocess_landmarks(frames[0].shape, landmarks)
         video = self.video_process(video, keypoints)
         video = torch.tensor(video)

@@ -4,6 +4,7 @@ import cv2
 
 from modules.utils import rotation_matrix_to_angles
 
+
 FACE_3D_MODEL = np.array([
     [285, 528, 200],  # Nose
     [285, 371, 152],  # Forehead
@@ -14,6 +15,7 @@ FACE_3D_MODEL = np.array([
 ], dtype=np.float64)
 # Corresponding landmark indices in MediaPipe
 FACE_LANDMARK_IDS = [1, 9, 57, 130, 287, 359]
+
 
 class LandmarkPoseEstimator:
     def __init__(self):
